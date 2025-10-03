@@ -3,6 +3,7 @@ using Messenger.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
 
 namespace Messenger.Infrastructure.Persistence.Repositories
 {
@@ -20,11 +21,10 @@ namespace Messenger.Infrastructure.Persistence.Repositories
             return true;
         }
 
-        // Fix this shit
         private int? GetCurrentUserId()
         {
-            var claim = httpContextAccessor.HttpContext?.User.FindFirst("sub");
-            if (claim is null || claim.Value is null)
+            var claim = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+            if (claim == null || claim.Value == null)
                 throw new ApplicationException("claim or claim's value not found.");
 
             var parsed = int.Parse(claim.Value);

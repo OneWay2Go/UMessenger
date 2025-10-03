@@ -1,6 +1,7 @@
 ﻿using Messenger.Application.DTOs;
 using Messenger.Application.Interfaces;
 using Messenger.Application.Mapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Messenger.API.Controllers
@@ -90,6 +91,7 @@ namespace Messenger.API.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("user/revoke-refresh-token")]
         public async Task<IActionResult> RevokeRefreshToken([FromQuery]int userId)
         {

@@ -19,9 +19,9 @@ namespace Messenger.Application.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity([
-                    new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                    new Claim("email_verified", user.IsEmailConfirmed.ToString())
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Email, user.Email),
+                    new Claim(JwtRegisteredClaimNames.EmailVerified, user.IsEmailConfirmed.ToString())
                 ]),
                 Expires = DateTime.UtcNow.AddMinutes(int.Parse(configuration["JWT:TokenValidityInMinutes"])),
                 SigningCredentials = credentials,
