@@ -14,6 +14,8 @@ namespace Messenger.Domain.Entities
         [Required, EmailAddress]
         public string Email { get; set; } = default!;
 
+        public int? EmailConfirmationCode { get; set; }
+
         public bool IsEmailConfirmed { get; set; } = false;
 
         [Required, MinLength(8)]

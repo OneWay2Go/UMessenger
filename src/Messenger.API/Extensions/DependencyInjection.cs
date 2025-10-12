@@ -1,4 +1,5 @@
-﻿using Messenger.Application.Interfaces;
+﻿using Messenger.Application.DTOs;
+using Messenger.Application.Interfaces;
 using Messenger.Application.Mapper;
 using Messenger.Application.Services;
 using Messenger.Infrastructure.Persistence;
@@ -16,8 +17,9 @@ namespace Messenger.API.Extensions
             return services;
         }
 
-        public static IServiceCollection AddApplication(this IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services, IConfiguration configuration)
         {
+            // Repositories and services
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddScoped<IChatRepository, ChatRepository>();
@@ -26,6 +28,10 @@ namespace Messenger.API.Extensions
             services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddScoped<UserMapper>();
             services.AddScoped<RefreshTokenMapper>();
+            services.AddScoped<IEmailService, EmailService>();
+
+            // Json configuration
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
             return services;
         }
