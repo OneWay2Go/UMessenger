@@ -33,6 +33,9 @@ namespace Messenger.API.Extensions
             services.AddScoped<ChatUserMapper>();
             services.AddScoped<MessageMapper>();
 
+            // Add SignalR
+            services.AddSignalR();
+
             // Json configuration
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
