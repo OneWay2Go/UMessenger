@@ -29,6 +29,9 @@ namespace Messenger.API.Extensions
             services.AddScoped<UserMapper>();
             services.AddScoped<RefreshTokenMapper>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ChatMapper>();
+            services.AddScoped<ChatUserMapper>();
+            services.AddScoped<MessageMapper>();
 
             // Json configuration
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
