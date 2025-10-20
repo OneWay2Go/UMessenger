@@ -192,6 +192,7 @@
 ﻿        /// Gets all users.
 ﻿        /// </summary>
 ﻿        /// <returns>A list of all users.</returns>
+        [Authorize]
 ﻿        [HttpGet("user/get-all")]
 ﻿        public IActionResult GetAllUsers()
 ﻿        {
@@ -211,6 +212,7 @@
 ﻿        /// </summary>
 ﻿        /// <param name="id">The ID of the user.</param>
 ﻿        /// <returns>The user object.</returns>
+        [Authorize]
 ﻿        [HttpGet("user/get-by-id/{id}")]
 ﻿        public async Task<IActionResult> GetUserById([FromRoute]int id)
 ﻿        {
@@ -233,6 +235,7 @@
 ﻿        /// </summary>
 ﻿        /// <param name="id">The ID of the user to remove.</param>
 ﻿        /// <returns>A confirmation message.</returns>
+        [Authorize]
 ﻿        [HttpDelete("user/remove/{id}")]
 ﻿        public async Task<IActionResult> RemoveUser([FromRoute]int id)
 ﻿        {
@@ -258,6 +261,7 @@
 ﻿        /// </summary>
 ﻿        /// <param name="dto">The data for the new user.</param>
 ﻿        /// <returns>A confirmation message.</returns>
+        [Authorize]
 ﻿        [HttpPost("user/add")]
 ﻿        public async Task<IActionResult> AddUser([FromBody]AddUserDTO dto)
 ﻿        {
@@ -282,6 +286,7 @@
 ﻿        /// <param name="id">The ID of the user to update.</param>
 ﻿        /// <param name="dto">The new user data.</param>
 ﻿        /// <returns>A confirmation message.</returns>
+        [Authorize]
 ﻿        [HttpPut("user/update/{id}")]
 ﻿        public async Task<IActionResult> UpdateUser([FromRoute]int id, [FromBody]UpdateUserDto dto)
 ﻿        {

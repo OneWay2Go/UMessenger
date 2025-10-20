@@ -1,6 +1,7 @@
 ﻿using Messenger.Application.DTOs;
 using Messenger.Application.Interfaces;
 using Messenger.Application.Mapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Messenger.API.Controllers
@@ -11,6 +12,7 @@ namespace Messenger.API.Controllers
         MessageMapper messageMapper
         ) : ControllerBase
     {
+        [Authorize]
         [HttpGet("message/get-all")]
         public IActionResult GetAll()
         {
@@ -25,6 +27,7 @@ namespace Messenger.API.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("message/get-by-id")]
         public async Task<IActionResult> GetById([FromQuery] int id)
         {
@@ -41,6 +44,7 @@ namespace Messenger.API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost("message/add")]
         public async Task<IActionResult> Add([FromBody]AddMessageDto dto)
         {
@@ -61,6 +65,7 @@ namespace Messenger.API.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("message/update")]
         public async Task<IActionResult> Update([FromBody]UpdateMessageDto dto)
         {
@@ -82,6 +87,7 @@ namespace Messenger.API.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("message/remove")]
         public async Task<IActionResult> Remove([FromQuery] int id)
         {

@@ -1,4 +1,5 @@
 using Messenger.API.Extensions;
+using Messenger.Application.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -73,6 +74,15 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options => options.AddPolicy("reactApp",
+    builder =>
+    {
+        builder.WithOrigins("https://localhost:7047")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    }));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -84,8 +94,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("reactApp");
+
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<MessageHub>("/hubs/message");
 
 app.Run();
