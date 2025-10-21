@@ -71,7 +71,7 @@
 ﻿                await refreshTokenRepository.AddAsync(refreshToken);
 ﻿                await refreshTokenRepository.SaveChangesAsync();
 ﻿
-﻿                return Ok(new { accessToken = jwt, refreshToken = refreshToken.Token });
+﻿                return Ok(new { user, accessToken = jwt, refreshToken = refreshToken.Token });
 ﻿            }
 ﻿            catch(Exception ex)
 ﻿            {

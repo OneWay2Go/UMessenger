@@ -45,6 +45,21 @@ namespace Messenger.API.Controllers
         }
 
         [Authorize]
+        [HttpGet("message/get-by-chat/{chatId}")]
+        public async Task<IActionResult> GetByChatId([FromRoute] int chatId)
+        {
+            try
+            {
+                var messages = await messageRepository.GetByChatIdAsync(chatId);
+                return Ok(messages);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpPost("message/add")]
         public async Task<IActionResult> Add([FromBody]AddMessageDto dto)
         {
