@@ -13,5 +13,12 @@ namespace Messenger.Infrastructure.Persistence.Repositories
                 return null;
             return user;
         }
+
+        public async Task<IEnumerable<User>> SearchUsersAsync(string query)
+        {
+            return await context.Users
+                .Where(u => u.Email.Contains(query) || u.Username.Contains(query))
+                .ToListAsync();
+        }
     }
 }

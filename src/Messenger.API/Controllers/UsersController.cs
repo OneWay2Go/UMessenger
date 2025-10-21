@@ -192,21 +192,35 @@
 ﻿        /// Gets all users.
 ﻿        /// </summary>
 ﻿        /// <returns>A list of all users.</returns>
-        [Authorize]
-﻿        [HttpGet("user/get-all")]
-﻿        public IActionResult GetAllUsers()
-﻿        {
-﻿            try
-﻿            {
-﻿                var users = userRepository.GetAll();
-﻿                return Ok(users);
-﻿            }
-﻿            catch (Exception ex)
-﻿            {
-﻿                return BadRequest(ex.Message);
-﻿            }
-﻿        }
-﻿
+                [Authorize]
+                [HttpGet("user/get-all")]
+                public IActionResult GetAllUsers()
+                {
+                    try
+                    {
+                        var users = userRepository.GetAll();
+                        return Ok(users);
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest(ex.Message);
+                    }
+                }
+        
+                [Authorize]
+                [HttpGet("user/search")]
+                public async Task<IActionResult> SearchUsers([FromQuery] string query)
+                {
+                    try
+                    {
+                        var users = await userRepository.SearchUsersAsync(query);
+                        return Ok(users);
+                    }
+                    catch (Exception ex)
+                    {
+                        return BadRequest(ex.Message);
+                    }
+                }﻿
 ﻿        /// <summary>
 ﻿        /// Gets a user by their ID.
 ﻿        /// </summary>
