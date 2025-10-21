@@ -78,6 +78,7 @@ builder.Services.AddCors(options => options.AddPolicy("reactApp",
     builder =>
     {
         builder.WithOrigins("https://localhost:7047")
+            .AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
