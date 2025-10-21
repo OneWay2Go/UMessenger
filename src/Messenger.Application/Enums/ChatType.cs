@@ -1,4 +1,4 @@
-﻿namespace Messenger.Domain.Enums
+﻿namespace Messenger.Application.Enums
 {
     public enum ChatType
     {

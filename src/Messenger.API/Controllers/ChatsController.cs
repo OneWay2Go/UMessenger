@@ -3,6 +3,7 @@ using Messenger.Application.Interfaces;
 using Messenger.Application.Mapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Messenger.API.Controllers
 {
@@ -12,6 +13,44 @@ namespace Messenger.API.Controllers
         ChatMapper chatMapper
         ) : ControllerBase
     {
+        [Authorize]
+        [HttpGet("chat/global-search")]
+        public async Task<IActionResult> GlobalSearch([FromQuery]string searchText)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                var chats = await chatRepository.GlobalSearchAsync(searchText, userId);
+
+                return Ok(chats);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("chat/one-on-one")]
+        public async Task<IActionResult> OneOnOne([FromQuery]int secondUserId)
+        {
+            try
+            {
+                int firstUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value);
+
+                var chat = await chatRepository.OneOnOne(firstUserId, secondUserId);
+                if (chat == null)
+                    return NotFound("There is chat with this user.");
+
+                return Ok(chat);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [Authorize]
         [HttpGet("chat/get-all")]
         public IActionResult GetAll()
