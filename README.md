@@ -13,7 +13,7 @@ A simple messenger application built with C#.
 
 Before you begin, ensure you have met the following requirements:
 
-*   [.NET SDK](https://dotnet.microsoft.com/en-us/download) (Version 6.0 or higher)
+*   [.NET SDK](https://dotnet.microsoft.com/en-us/download) (Version 8.0 or higher)
 *   A code editor (e.g., Visual Studio, VS Code with C# extension, JetBrains Rider)
 *   (Optional) A database server (e.g., SQL Server, PostgreSQL, MySQL).  The current implementation is likely configured for a default local database if any persistence layer is used - further investigation of the codebase is necessary.
 
