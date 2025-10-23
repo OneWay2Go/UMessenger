@@ -14,6 +14,8 @@ namespace Messenger.Domain.Entities
         public string? ChatImageUrl { get; set; }  // Group avatar
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+        public bool IsDeleted { get; set; } = false;
+
         // Navigation
         public ICollection<Message> Messages { get; set; } = new List<Message>();
         public ICollection<ChatUser> ChatUsers { get; set; } = new List<ChatUser>();

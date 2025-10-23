@@ -17,11 +17,13 @@ namespace Messenger.Domain.Entities
         public string? FileType { get; set; }     // mime-type (image/jpeg, application/pdf)
         public bool IsAttachment { get; set; } = false;
 
+        public bool IsDeleted { get; set; } = false;
+
         public DateTime SentAt { get; set; } = DateTime.UtcNow;
         public MessageStatus Status { get; set; } = MessageStatus.Delivered;
 
-        public int SenderId { get; set; }
-        public User Sender { get; set; } = default!;
+        public int UserId { get; set; }
+        public User User { get; set; } = default!;
 
         public int ChatId { get; set; }
         public Chat Chat { get; set; } = default!;

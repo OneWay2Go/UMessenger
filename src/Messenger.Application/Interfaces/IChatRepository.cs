@@ -8,5 +8,9 @@ namespace Messenger.Application.Interfaces
         Task<GlobalSearchResponseDto> GlobalSearchAsync(string searchText, int userId);
 
         Task<Chat?> OneOnOne(int firstUserId, int secondUserId);
+
+        Task<IList<Chat>> GetAllChatsWithUserRole(int userId);
+
+        Task<Chat?> GetChatByIdWithUserRole(int chatId, int userId);
     }
 }

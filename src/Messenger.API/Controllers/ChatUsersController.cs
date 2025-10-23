@@ -18,7 +18,9 @@ namespace Messenger.API.Controllers
         {
             try
             {
-                var chatUsers = chatUserRepository.GetAll();
+                var chatUsers = chatUserRepository.GetAll()
+                    .Where(cu => cu.IsDeleted == false);
+
                 return Ok(chatUsers);
             }
             catch(Exception ex)
@@ -34,7 +36,7 @@ namespace Messenger.API.Controllers
             try
             {
                 var chatUser = await chatUserRepository.GetByIdAsync(id);
-                if (chatUser is null)
+                if (chatUser is null || chatUser.IsDeleted == true)
                     return NotFound("There is no chatUser with this id.");
                 return Ok(chatUser);
             }
@@ -98,7 +100,9 @@ namespace Messenger.API.Controllers
                 if(chatUser is null)
                     return NotFound("There is no chatUser with this id.");
 
-                chatUserRepository.Delete(chatUser);
+                chatUser.IsDeleted = true;
+
+                chatUserRepository.Update(chatUser);
                 await chatUserRepository.SaveChangesAsync();
 
                 return NoContent();

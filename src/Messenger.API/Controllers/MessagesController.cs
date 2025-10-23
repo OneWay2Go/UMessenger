@@ -3,6 +3,7 @@ using Messenger.Application.Interfaces;
 using Messenger.Application.Mapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Messenger.API.Controllers
 {
@@ -18,8 +19,10 @@ namespace Messenger.API.Controllers
         {
             try
             {
-                var chats = messageRepository.GetAll();
-                return Ok(chats);
+                var messages = messageRepository.GetAll()
+                    .Where(m => m.IsDeleted != true);
+
+                return Ok(messages);
             }
             catch (Exception ex)
             {
@@ -35,7 +38,11 @@ namespace Messenger.API.Controllers
             {
                 var message = await messageRepository.GetByIdAsync(id);
                 if (message is null)
-                    return NotFound("There is no chat with this id.");
+                    return NotFound("There is no message with this id.");
+
+                if (message.IsDeleted == true)
+                    return NotFound("There is no message with this id.");
+
                 return Ok(message);
             }
             catch (Exception ex)
@@ -103,6 +110,42 @@ namespace Messenger.API.Controllers
         }
 
         [Authorize]
+        [HttpPut("message/update-user-check")]
+        public async Task<IActionResult> UpdateWithUserCheck([FromBody]UpdateMessageDto dto)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                await messageRepository.UpdateWithUserCheckAsync(dto, userId);
+
+                return NoContent();
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpDelete("message/remove-user-check")]
+        public async Task<IActionResult> RemoveWithUserCheck([FromQuery]int id)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+
+                await messageRepository.DeleteWithUserCheckAsync(id, userId);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
         [HttpDelete("message/remove")]
         public async Task<IActionResult> Remove([FromQuery] int id)
         {
@@ -112,7 +155,9 @@ namespace Messenger.API.Controllers
                 if (message is null)
                     return NotFound("There is no chat with this id.");
 
-                messageRepository.Delete(message);
+                message.IsDeleted = true;
+
+                messageRepository.Update(message);
                 await messageRepository.SaveChangesAsync();
 
                 return NoContent();

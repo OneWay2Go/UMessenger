@@ -29,6 +29,8 @@ namespace Messenger.Domain.Entities
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? LastSeen { get; set; }
 
+        public bool IsDeleted { get; set; } = false;
+
         // Navigation
         public ICollection<Message> Messages { get; set; } = new List<Message>();
         public ICollection<ChatUser> ChatUsers { get; set; } = new List<ChatUser>();

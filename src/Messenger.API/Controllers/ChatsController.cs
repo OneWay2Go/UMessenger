@@ -53,11 +53,13 @@ namespace Messenger.API.Controllers
 
         [Authorize]
         [HttpGet("chat/get-all")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAllAsync()
         {
             try
             {
-                var chats = chatRepository.GetAll();
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var chats = await chatRepository.GetAllChatsWithUserRole(userId);
+
                 return Ok(chats);
             }
             catch (Exception ex)
@@ -72,7 +74,8 @@ namespace Messenger.API.Controllers
         {
             try
             {
-                var chat = await chatRepository.GetByIdAsync(id);
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var chat = await chatRepository.GetChatByIdWithUserRole(id, userId);
                 if (chat is null)
                     return NotFound("There is no chat with this id.");
                 return Ok(chat);
@@ -136,7 +139,9 @@ namespace Messenger.API.Controllers
                 if (chat is null)
                     return NotFound("There is no chat with this id.");
 
-                chatRepository.Delete(chat);
+                chat.IsDeleted = true;
+
+                chatRepository.Update(chat);
                 await chatRepository.SaveChangesAsync();
 
                 return NoContent();
