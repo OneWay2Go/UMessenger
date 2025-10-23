@@ -32,7 +32,7 @@ namespace Messenger.Infrastructure.Persistence.Repositories
             var response = new GlobalSearchResponseDto();
 
             response.Users = await context.Users
-                .Where(u => u.IsDeleted == false && (u.Username == searchText || u.Email == searchText))
+                .Where(u => u.IsDeleted == false && (u.Username.Contains(searchText) || u.Email.Contains(searchText)))
                 .ToListAsync();
 
             response.Chats = await context.Chats
