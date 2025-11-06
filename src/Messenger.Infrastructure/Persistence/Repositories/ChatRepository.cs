@@ -1,7 +1,7 @@
 ﻿using Messenger.Application.DTOs;
-using Messenger.Application.Enums;
 using Messenger.Application.Interfaces;
 using Messenger.Domain.Entities;
+using Messenger.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace Messenger.Infrastructure.Persistence.Repositories
@@ -67,8 +67,43 @@ namespace Messenger.Infrastructure.Persistence.Repositories
 
         public async Task<Chat?> OneOnOne(int firstUserId, int secondUserId)
         {
-            return await context.Chats?.Include(c => c.ChatUsers.Where(cu => (cu.UserId == firstUserId || cu.UserId == secondUserId) && cu.IsDeleted == false))
+            var chat = await context.Chats?.Include(c => c.ChatUsers.Where(cu => (cu.UserId == firstUserId || cu.UserId == secondUserId) && cu.IsDeleted == false))
                 .FirstOrDefaultAsync(c => ((int)c.Type == (int)ChatType.Private) && c.IsDeleted == false);
+
+            if (chat is null)
+            {
+                var newChat = new Chat
+                {
+                    Name = "New private chat",
+                    IsDeleted = false,
+                    CreatedAt = DateTime.Now,
+                };
+
+                await context.Chats.AddAsync(newChat);
+                await context.SaveChangesAsync();
+
+                var firstChatUser = new ChatUser
+                {
+                    ChatId = newChat.Id,
+                    UserId = firstUserId,
+                    IsDeleted = false
+                };
+
+                var secondChatUser = new ChatUser
+                {
+                    ChatId = newChat.Id,
+                    UserId = secondUserId,
+                    IsDeleted = false
+                };
+
+                await context.ChatUsers.AddAsync(firstChatUser);
+                await context.ChatUsers.AddAsync(secondChatUser);
+                await context.SaveChangesAsync();
+
+                return newChat;
+            }
+
+            return chat;
         }
     }
 }
