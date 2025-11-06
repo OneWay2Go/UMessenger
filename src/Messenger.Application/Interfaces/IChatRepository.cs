@@ -9,8 +9,8 @@ namespace Messenger.Application.Interfaces
 
         Task<Chat?> OneOnOne(int firstUserId, int secondUserId);
 
-        Task<IList<Chat>> GetAllChatsWithUserRole(int userId);
+        Task<IList<ChatDto>> GetAllChatsWithUserRole(int userId);
 
-        Task<Chat?> GetChatByIdWithUserRole(int chatId, int userId);
+        Task<ChatDto?> GetChatByIdWithUserRole(int chatId, int userId);
     }
 }

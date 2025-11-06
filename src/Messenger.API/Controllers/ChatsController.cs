@@ -58,9 +58,9 @@ namespace Messenger.API.Controllers
             try
             {
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var chats = await chatRepository.GetAllChatsWithUserRole(userId);
-
-                return Ok(chats);
+                var chatsDto = await chatRepository.GetAllChatsWithUserRole(userId);
+                
+                return Ok(chatsDto);
             }
             catch (Exception ex)
             {
@@ -75,10 +75,11 @@ namespace Messenger.API.Controllers
             try
             {
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var chat = await chatRepository.GetChatByIdWithUserRole(id, userId);
-                if (chat is null)
+                var chatDto = await chatRepository.GetChatByIdWithUserRole(id, userId);
+                if (chatDto is null)
                     return NotFound("There is no chat with this id.");
-                return Ok(chat);
+
+                return Ok(chatDto);
             }
             catch (Exception ex)
             {

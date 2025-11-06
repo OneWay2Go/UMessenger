@@ -8,23 +8,42 @@ namespace Messenger.Infrastructure.Persistence.Repositories
 {
     public class ChatRepository(MessengerDbContext context) : Repository<Chat>(context), IChatRepository
     {
-        public async Task<IList<Chat>> GetAllChatsWithUserRole(int userId)
+        public async Task<IList<ChatDto>> GetAllChatsWithUserRole(int userId)
         {
-            var chats = await context.Chats
+            var chatsDto = await context.Chats
                 .Include(c => c.ChatUsers.Where(cu => cu.UserId == userId && cu.IsDeleted == false))
                 .Where(c => c.IsDeleted == false)
+                .Select(c => new ChatDto
+                {
+                    Name = c.Name,
+                    CreatedAt = c.CreatedAt,
+                    ChatImageUrl = c.ChatImageUrl,
+                    ChatUsers = c.ChatUsers.ToList(),
+                    CurrentUserRole = c.ChatUsers.First().Role.ToString(),
+                    Type = c.Type
+                })
                 .ToListAsync();
 
-            return chats;
+            return chatsDto;
         }
 
-        public async Task<Chat?> GetChatByIdWithUserRole(int chatId, int userId)
+        public async Task<ChatDto?> GetChatByIdWithUserRole(int chatId, int userId)
         {
             var chat = await context.Chats
                 .Include(c => c.ChatUsers.Where(cu => (cu.UserId == userId) && cu.IsDeleted == false))
-                .FirstOrDefaultAsync(c => (c.Id == chatId) && c.IsDeleted == false);
+                .FirstOrDefaultAsync(c => (c.Id == chatId) && !c.IsDeleted);
 
-            return chat;
+            var chatDto = new ChatDto
+            {
+                Name = chat.Name,
+                CreatedAt = chat.CreatedAt,
+                ChatImageUrl = chat.ChatImageUrl,
+                ChatUsers = chat.ChatUsers.ToList(),
+                CurrentUserRole = chat.ChatUsers.First().Role.ToString(),
+                Type = chat.Type
+            };
+
+            return chatDto;
         }
 
         public async Task<GlobalSearchResponseDto> GlobalSearchAsync(string searchText, int userId)
