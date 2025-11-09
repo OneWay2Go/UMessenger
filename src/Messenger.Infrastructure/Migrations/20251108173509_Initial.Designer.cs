@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Messenger.Infrastructure.Migrations
 {
     [DbContext(typeof(MessengerDbContext))]
-    [Migration("20251023170756_EntityChanges")]
-    partial class EntityChanges
+    [Migration("20251108173509_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

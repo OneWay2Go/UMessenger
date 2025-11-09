@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Messenger.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,8 @@ namespace Messenger.Infrastructure.Migrations
                     Name = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
                     Type = table.Column<int>(type: "integer", nullable: false),
                     ChatImageUrl = table.Column<string>(type: "text", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,13 +38,15 @@ namespace Messenger.Infrastructure.Migrations
                     Username = table.Column<string>(type: "text", nullable: true),
                     DisplayName = table.Column<string>(type: "text", nullable: true),
                     Email = table.Column<string>(type: "text", nullable: false),
+                    EmailConfirmationCode = table.Column<int>(type: "integer", nullable: true),
                     IsEmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
                     Bio = table.Column<string>(type: "text", nullable: true),
                     ProfileImageUrl = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastSeen = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    LastSeen = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,7 +62,8 @@ namespace Messenger.Infrastructure.Migrations
                     ChatId = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
-                    JoinedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    JoinedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,9 +94,10 @@ namespace Messenger.Infrastructure.Migrations
                     FileSize = table.Column<long>(type: "bigint", nullable: true),
                     FileType = table.Column<string>(type: "text", nullable: true),
                     IsAttachment = table.Column<bool>(type: "boolean", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
-                    SenderId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<int>(type: "integer", nullable: false),
                     ChatId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -105,8 +110,8 @@ namespace Messenger.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Messages_Users_SenderId",
-                        column: x => x.SenderId,
+                        name: "FK_Messages_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -149,9 +154,9 @@ namespace Messenger.Infrastructure.Migrations
                 column: "ChatId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_SenderId",
+                name: "IX_Messages_UserId",
                 table: "Messages",
-                column: "SenderId");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",

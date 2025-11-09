@@ -81,7 +81,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors(options => options.AddPolicy("reactApp",
     builder =>
     {
-        builder.WithOrigins("http://localhost:8080")
+        builder.WithOrigins("https://umessenger-frontend.onrender.com")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

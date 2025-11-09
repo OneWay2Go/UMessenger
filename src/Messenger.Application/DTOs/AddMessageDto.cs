@@ -11,7 +11,7 @@
         public string? FileType { get; set; }     // mime-type (image/jpeg, application/pdf)
         public bool IsAttachment { get; set; } = false;
 
-        public int SenderId { get; set; }
+        public int UserId { get; set; }
         public int ChatId { get; set; }
     }
 }
