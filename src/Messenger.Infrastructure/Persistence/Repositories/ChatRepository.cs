@@ -30,15 +30,21 @@ namespace Messenger.Infrastructure.Persistence.Repositories
         public async Task<ChatDto?> GetChatByIdWithUserRole(int chatId, int userId)
         {
             var chat = await context.Chats
-                .Include(c => c.ChatUsers.Where(cu => (cu.UserId == userId) && cu.IsDeleted == false))
-                .FirstOrDefaultAsync(c => (c.Id == chatId) && !c.IsDeleted);
+                .Include(c => c.ChatUsers)
+                .FirstOrDefaultAsync(c => c.Id == chatId && !c.IsDeleted);
+
+            if (chat == null)
+                return null;
+
+            var currentUser = chat.ChatUsers
+                .FirstOrDefault(cu => cu.UserId == userId && !cu.IsDeleted);
 
             var chatDto = new ChatDto
             {
                 Name = chat.Name,
                 CreatedAt = chat.CreatedAt,
                 ChatImageUrl = chat.ChatImageUrl,
-                ChatUsers = chat.ChatUsers.ToList(),
+                ChatUsers = chat.ChatUsers.Where(cu => cu.UserId == userId && !cu.IsDeleted).ToList(),
                 CurrentUserRole = chat.ChatUsers.First().Role.ToString(),
                 Type = chat.Type
             };
