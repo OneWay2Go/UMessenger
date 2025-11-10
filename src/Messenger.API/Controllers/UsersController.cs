@@ -3,6 +3,8 @@ using Messenger.Application.Interfaces;
 using Messenger.Application.Mapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.StaticFiles;
+using System.Security.Claims;
 
 namespace Messenger.API.Controllers
 {
@@ -324,6 +326,21 @@ namespace Messenger.API.Controllers
                 return NoContent();
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpPost("user/upload-avatar")]
+        public async Task<IActionResult> UploadAvatar(IFormFile file, CancellationToken ct)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                throw new NotImplementedException();
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
