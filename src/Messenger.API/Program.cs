@@ -98,11 +98,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("reactApp");
-
 app.UseAuthorization();
 
+app.UseCors("reactApp");
+
 app.MapControllers();
+
+app.UseStaticFiles();
 
 app.MapHub<MessageHub>("/hubs/message");
 
