@@ -100,10 +100,10 @@ app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 
+app.UseCors("reactApp");
+
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.UseCors("reactApp");
 
 app.MapControllers();
 
